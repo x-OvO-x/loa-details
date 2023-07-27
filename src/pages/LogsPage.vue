@@ -165,6 +165,26 @@
                   <q-item-label>Screenshot With Names</q-item-label>
                 </q-item-section>
               </q-item>
+              <q-item
+                clickable
+                v-close-popup
+                @click="($refs.logView as any).takeScreenshot(false, true)"
+              >
+                <q-item-section>
+                  <q-item-label
+                    >Screenshot With Names And Without Logo</q-item-label
+                  >
+                </q-item-section>
+              </q-item>
+              <q-item
+                clickable
+                v-close-popup
+                @click="($refs.logView as any).takeScreenshot(true, true)"
+              >
+                <q-item-section>
+                  <q-item-label>Screenshot Without Names And Logo</q-item-label>
+                </q-item-section>
+              </q-item>
             </q-list>
           </q-btn-dropdown>
         </div>

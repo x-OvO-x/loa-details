@@ -31,7 +31,10 @@
             />
           </span>
         </span>
-        <span v-if="isTakingScreenshot" class="watermark-box">
+        <span
+          v-if="isTakingScreenshot && !hideLogoOnScreenshot"
+          class="watermark-box"
+        >
           <img class="watermark-logo" :src="logoImg" />
           github.com/lost-ark-dev/loa-details
         </span>
@@ -165,6 +168,7 @@ const damageType: Ref<DamageType> = ref("dmg");
 
 const isTakingScreenshot = ref(false);
 const hideNamesOnScreenshot = ref(false);
+const hideLogoOnScreenshot = ref(false);
 
 const totalDamageDealt = computed(() => {
   let totalDamageDealt = props.logData.damageStatistics.totalDamageDealt;
@@ -179,8 +183,9 @@ const totalDamageDealt = computed(() => {
   return totalDamageDealt;
 });
 
-async function takeScreenshot(hideNames = true) {
+async function takeScreenshot(hideNames = true, hideLogo = false) {
   hideNamesOnScreenshot.value = hideNames;
+  hideLogoOnScreenshot.value = hideLogo;
   isTakingScreenshot.value = true;
   await sleep(600);
 
