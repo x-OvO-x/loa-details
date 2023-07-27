@@ -1,6 +1,7 @@
 <template>
   <div ref="logView" :style="isTakingScreenshot ? 'padding: 16px' : ''">
     <div class="info-box">
+      <span v-if="gate">{{ gate }}</span>
       <div class="flex" v-if="logData">
         <span style="margin-right: 12px">
           {{ logData.mostDamageTakenEntity.name }}
@@ -143,6 +144,7 @@ import { useSettingsStore } from "src/stores/settings";
 import { GameStateFile } from "src-electron/log-parser/file-parser";
 import { DamageType } from "src/util/helpers";
 import AbbreviatedNumberTemplate from "./DamageMeter/AbbreviatedNumberTemplate.vue";
+import { encounters } from "src/constants/encounters";
 
 const logoImg = new URL("../assets/images/logo.png", import.meta.url).href;
 
@@ -215,6 +217,20 @@ async function takeScreenshot(hideNames = true) {
     html: true,
   });
 }
+
+const getGate = (boss: string) => {
+  let gate = "";
+
+  Object.values(encounters).forEach((e) => {
+    if (e.encounterNames.includes(boss)) {
+      gate += `[ ${e.name} ]`;
+    }
+  });
+
+  return gate.toLowerCase().includes("gate") ? gate : null;
+};
+
+const gate = computed(() => getGate(props.logData.mostDamageTakenEntity.name));
 </script>
 
 <style>
