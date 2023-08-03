@@ -60,6 +60,13 @@
       </p>
 
       <h5>Changelog</h5>
+      <h6 id="custom">Custom Non Official Version</h6>
+      <ul>
+        <li>Order sessions by Newest or Oldest</li>
+        <li>Gate Numbers on top of the boss name</li>
+        <li>Option to screenshot without logo</li>
+        <li>Added missing names for Kakul Gate 3 and Valtan Gate 2</li>
+      </ul>
       <h6 id="1-4-6">1.4.6</h6>
       <ul>
         <li>Fix issue with summons</li>

@@ -56,7 +56,7 @@ export const encounters = {
     name: "Valtan Gate 2",
     image: new URL("../assets/images/encounters/valtan.png", import.meta.url)
       .href,
-    encounterNames: ["Demon Beast Commander Valtan"],
+    encounterNames: ["Demon Beast Commander Valtan", "찢겨진 마수의 군주"],
   },
   VykasG1: {
     name: "Vykas Gate 1",
@@ -98,7 +98,7 @@ export const encounters = {
       "../assets/images/encounters/Kakul-Saydon.png",
       import.meta.url
     ).href,
-    encounterNames: ["Kakul-Saydon"],
+    encounterNames: ["Kakul-Saydon", "Encore-Desiring Kakul-Saydon"],
   },
   BrelshazaG1: {
     name: "Brelshaza Gate 1",
