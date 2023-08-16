@@ -67,6 +67,10 @@
         <li>Option to screenshot without logo</li>
         <li>Added missing names for Kakul Gate 3 and Valtan Gate 2</li>
       </ul>
+      <h6 id="1-4-7">1.4.7</h6>
+      <ul>
+        <li>Support for Game update - 16/08/2023 - Aeromancer</li>
+      </ul>
       <h6 id="1-4-6">1.4.6</h6>
       <ul>
         <li>Fix issue with summons</li>
