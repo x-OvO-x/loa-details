@@ -171,7 +171,13 @@ function parseLog(
           isPlayer: false,
         };
 
+        const players: string[] = [];
+
         encounter.entities.forEach((i) => {
+          if (i.isPlayer && i.damageInfo.damageDealt > 0) {
+            players.push(i.name);
+          }
+
           if (i.damageTaken > mostDamageTakenEntity.damageTaken) {
             mostDamageTakenEntity = {
               name: i.name,
@@ -184,6 +190,7 @@ function parseLog(
         const encounterDetails = {
           duration,
           mostDamageTakenEntity,
+          players,
         };
 
         const encounterId = randomUUID();
@@ -314,4 +321,5 @@ type Encounter = {
     damageTaken: number;
     isPlayer: boolean;
   };
+  players: string[];
 };

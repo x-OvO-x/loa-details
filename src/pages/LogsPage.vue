@@ -83,6 +83,31 @@
           </q-select>
 
           <q-select
+            v-if="logViewerStore.viewerState === 'none'"
+            filled
+            v-model="logViewerStore.playersFilter"
+            @update:model-value="filterLogsByPlayers()"
+            multiple
+            :options="logViewerStore.players"
+            label="Filter Players"
+            style="width: 256px; margin-left: 10px"
+          >
+            <template
+              v-if="logViewerStore.playersFilter.length > 0"
+              v-slot:append
+            >
+              <q-icon
+                name="cancel"
+                @click.stop.prevent="
+                  logViewerStore.playersFilter = [];
+                  computedLogFileList();
+                "
+                class="cursor-pointer q-field__focusable-action"
+              />
+            </template>
+          </q-select>
+
+          <q-select
             v-if="logViewerStore.viewerState === 'viewing-session'"
             filled
             v-model="logViewerStore.encounterFilter"
@@ -101,6 +126,32 @@
                 @click.stop.prevent="
                   logViewerStore.encounterFilter = [];
                   calculateEncounterRows();
+                "
+                class="cursor-pointer q-field__focusable-action"
+              />
+            </template>
+          </q-select>
+
+          <!-- TODO: This should be an array with only players inside the log -->
+          <q-select
+            v-if="logViewerStore.viewerState === 'viewing-session'"
+            filled
+            v-model="logViewerStore.playersFilter"
+            @update:model-value="filterRowsByPlayers()"
+            multiple
+            :options="logViewerStore.players"
+            label="Filter Players"
+            style="width: 256px; margin-left: 10px"
+          >
+            <template
+              v-if="logViewerStore.playersFilter.length > 0"
+              v-slot:append
+            >
+              <q-icon
+                name="cancel"
+                @click.stop.prevent="
+                  logViewerStore.playersFilter = [];
+                  filterRowsByPlayers();
                 "
                 class="cursor-pointer q-field__focusable-action"
               />
@@ -215,56 +266,112 @@
               @click="changeLogViewerStoreState('none')"
             />
           </q-page-sticky>
-          <q-timeline dark color="secondary">
-            <q-timeline-entry
-              v-if="encounterRows.length === 0"
-              style="font-size: 24px; font-family: 'questrial'"
-            >
-              No encounter found based on filter and options.
-            </q-timeline-entry>
 
-            <q-timeline-entry
-              v-for="(encounter, index) in encounterRows"
-              :key="`${index}-${encounter}`"
-              :title="
-                encounter.encounterName +
-                ' | ' +
-                encounter.attempts.length +
-                ' attempt(s)'
-              "
-              :subtitle="
-                millisToHourMinuteSeconds(encounter.startingMs) +
-                ' - ' +
-                millisToHourMinuteSeconds(
-                  encounter.startingMs + encounter.duration
-                )
-              "
-            >
-              <q-scroll-area
-                style="width: calc(100vw - 96px - 12px)"
-                :style="{ height: encounter.image ? '272px' : '96px' }"
-                ref="horizontalScrollAreas"
+          <div v-if="filteredEncounterRows.length > 0">
+            <q-timeline dark color="secondary">
+              <q-timeline-entry
+                v-if="filteredEncounterRows.length === 0"
+                style="font-size: 24px; font-family: 'questrial'"
               >
-                <div class="row no-wrap">
-                  <q-card
-                    v-for="(attempt, index) in encounter.attempts"
-                    :key="attempt.filename"
-                    dark
-                    class="my-card q-mr-md"
-                    style="width: 256px"
-                    @click="onEncounterRowClick(attempt)"
-                  >
-                    <img v-if="encounter.image" :src="encounter.image" />
+                No encounter found based on filter and options.
+              </q-timeline-entry>
 
-                    <q-card-section>
-                      <div class="text-h6">Attempt {{ index + 1 }}</div>
-                      <div class="text-subtitle2">{{ attempt.duration }}</div>
-                    </q-card-section>
-                  </q-card>
-                </div>
-              </q-scroll-area>
-            </q-timeline-entry>
-          </q-timeline>
+              <q-timeline-entry
+                v-for="(encounter, index) in filteredEncounterRows"
+                :key="`filtered-${index}-${encounter}`"
+                :title="
+                  encounter.encounterName +
+                  ' | ' +
+                  encounter.attempts.length +
+                  ' attempt(s)'
+                "
+                :subtitle="
+                  millisToHourMinuteSeconds(encounter.startingMs) +
+                  ' - ' +
+                  millisToHourMinuteSeconds(
+                    encounter.startingMs + encounter.duration
+                  )
+                "
+              >
+                <q-scroll-area
+                  style="width: calc(100vw - 96px - 12px)"
+                  :style="{ height: encounter.image ? '272px' : '96px' }"
+                  ref="horizontalScrollAreas"
+                >
+                  <div class="row no-wrap">
+                    <q-card
+                      v-for="(attempt, index) in encounter.attempts"
+                      :key="attempt.filename"
+                      dark
+                      class="my-card q-mr-md"
+                      style="width: 256px"
+                      @click="onEncounterRowClick(attempt)"
+                    >
+                      <img v-if="encounter.image" :src="encounter.image" />
+
+                      <q-card-section>
+                        <div class="text-h6">Attempt {{ index + 1 }}</div>
+                        <div class="text-subtitle2">{{ attempt.duration }}</div>
+                      </q-card-section>
+                    </q-card>
+                  </div>
+                </q-scroll-area>
+              </q-timeline-entry>
+            </q-timeline>
+          </div>
+
+          <div v-else>
+            <q-timeline dark color="secondary">
+              <q-timeline-entry
+                v-if="encounterRows.length === 0"
+                style="font-size: 24px; font-family: 'questrial'"
+              >
+                No encounter found based on filter and options.
+              </q-timeline-entry>
+
+              <q-timeline-entry
+                v-for="(encounter, index) in encounterRows"
+                :key="`${index}-${encounter}`"
+                :title="
+                  encounter.encounterName +
+                  ' | ' +
+                  encounter.attempts.length +
+                  ' attempt(s)'
+                "
+                :subtitle="
+                  millisToHourMinuteSeconds(encounter.startingMs) +
+                  ' - ' +
+                  millisToHourMinuteSeconds(
+                    encounter.startingMs + encounter.duration
+                  )
+                "
+              >
+                <q-scroll-area
+                  style="width: calc(100vw - 96px - 12px)"
+                  :style="{ height: encounter.image ? '272px' : '96px' }"
+                  ref="horizontalScrollAreas"
+                >
+                  <div class="row no-wrap">
+                    <q-card
+                      v-for="(attempt, index) in encounter.attempts"
+                      :key="attempt.filename"
+                      dark
+                      class="my-card q-mr-md"
+                      style="width: 256px"
+                      @click="onEncounterRowClick(attempt)"
+                    >
+                      <img v-if="encounter.image" :src="encounter.image" />
+
+                      <q-card-section>
+                        <div class="text-h6">Attempt {{ index + 1 }}</div>
+                        <div class="text-subtitle2">{{ attempt.duration }}</div>
+                      </q-card-section>
+                    </q-card>
+                  </div>
+                </q-scroll-area>
+              </q-timeline-entry>
+            </q-timeline>
+          </div>
         </div>
       </div>
 
@@ -333,7 +440,24 @@ async function changeLogViewerStoreState(newState: ViewerState) {
     verticalScrollOffsets[logViewerStore.viewerState] =
       verticalScrollArea.value.getScroll().verticalPosition; //Save previous position
 
+  if (newState === "none") filterLogsByPlayers();
+
   const oldState = logViewerStore.viewerState;
+
+  if (oldState === "viewing-session" && newState === "none") {
+    logViewerStore.players = [];
+
+    const players = logViewerStore.sessions
+      .flatMap((s) => s.sessionEncounters.flatMap((se) => se.players))
+      .sort();
+
+    for (const player of players) {
+      if (!logViewerStore.players.includes(player)) {
+        logViewerStore.players.push(player);
+      }
+    }
+  }
+
   if (newState === "viewing-session") {
     if (oldState === "none") {
       verticalScrollOffsets[newState] = 0; //Reset scroll when we open a new session
@@ -412,8 +536,15 @@ function onSessionRowClick(event: Event, row: SessionInfo) {
 
   logViewerStore.encounterOptions = [];
   logViewerStore.encounterFilter.length = 0;
+  logViewerStore.players = [];
 
   row.sessionEncounters.forEach((encounter) => {
+    for (const player of encounter.players) {
+      if (!logViewerStore.players.includes(player)) {
+        logViewerStore.players.push(player);
+      }
+    }
+
     let encounterName = encounter.encounterName;
     Object.values(encounters).forEach((encounter) => {
       if (encounter.encounterNames.includes(encounterName)) {
@@ -426,6 +557,8 @@ function onSessionRowClick(event: Event, row: SessionInfo) {
     if (!logViewerStore.encounterOptions.includes(encounterName)) {
       logViewerStore.encounterOptions.push(encounterName);
     }
+
+    logViewerStore.players.sort();
   });
 
   logViewerStore.encounterOptions.sort();
@@ -503,6 +636,7 @@ function calculateEncounterRows() {
   });
 
   reOrderSessions();
+  filterRowsByPlayers();
 }
 /* End session table */
 
@@ -520,10 +654,43 @@ function reOrderSessions() {
   if (currentOrientation === logViewerStore.sessionsOrder.value) return;
 
   encounterRows.value.reverse();
+  if (filteredEncounterRows.value.length > 0)
+    filteredEncounterRows.value.reverse();
+}
+
+function filterRowsByPlayers() {
+  if (encounterRows.value.length === 1) return;
+
+  if (logViewerStore.playersFilter.length === 0) {
+    return (filteredEncounterRows.value = []);
+  }
+
+  const filteredRows: RowData[] = [];
+
+  encounterRows.value.forEach((er) => {
+    const filteredAttempts: SessionData[] = [];
+
+    er.attempts.forEach((a) => {
+      if (
+        a.players.some((ps) => logViewerStore.playersFilter.indexOf(ps) >= 0)
+      ) {
+        filteredAttempts.push(a);
+      }
+    });
+
+    if (filteredAttempts.length > 0) {
+      filteredRows.push(
+        Object.assign({ ...er, attempts: filteredAttempts }) as RowData
+      );
+    }
+  });
+
+  if (filteredRows.length > 0) filteredEncounterRows.value = filteredRows;
 }
 
 /* Start encounter table */
 const encounterRows: Ref<RowData[]> = ref([]);
+const filteredEncounterRows: Ref<RowData[]> = ref([]);
 
 function onEncounterRowClick(row: SessionData) {
   void changeLogViewerStoreState("viewing-encounter");
@@ -558,17 +725,25 @@ function calculateLogFileList(value: ParsedLogInfo[]) {
         encounterName: val_encounter.mostDamageTakenEntity.name,
         durationTs: val_encounter.duration,
         duration: millisToMinutesAndSeconds(val_encounter.duration),
+        players: val_encounter.players,
       });
     });
 
     sessionEncounters.forEach((encounter) => {
       let encounterName = encounter.encounterName;
 
+      for (const player of encounter.players) {
+        if (!logViewerStore.players.includes(player)) {
+          logViewerStore.players.push(player);
+        }
+      }
+
       if (!logViewerStore.encounterOptions.includes(encounterName)) {
         logViewerStore.encounterOptions.push(encounterName);
       }
     });
 
+    logViewerStore.players.sort();
     logViewerStore.encounterOptions.sort();
 
     if (
@@ -597,6 +772,13 @@ function calculateLogFileList(value: ParsedLogInfo[]) {
 }
 
 function computedLogFileList() {
+  if (
+    logViewerStore.logfileFilter.length === 0 &&
+    logViewerStore.playersFilter.length > 0
+  ) {
+    return filterLogsByPlayers();
+  }
+
   if (logViewerStore.logfileFilter.length === 0) {
     logViewerStore.computedSessions = logViewerStore.sessions;
     return;
@@ -605,11 +787,50 @@ function computedLogFileList() {
   const filteredSessions: SessionInfo[] = [];
 
   logViewerStore.sessions.forEach((session) => {
+    const filteredEncounters: SessionData[] = [];
+
+    session.sessionEncounters.forEach((encounter) => {
+      if (logViewerStore.playersFilter.length > 0) {
+        for (const player of encounter.players) {
+          if (
+            logViewerStore.playersFilter.includes(player) &&
+            logViewerStore.logfileFilter.includes(encounter.encounterName)
+          ) {
+            filteredEncounters.push(encounter);
+          }
+        }
+      } else if (
+        logViewerStore.logfileFilter.includes(encounter.encounterName)
+      ) {
+        filteredEncounters.push(encounter);
+      }
+    });
+
+    if (filteredEncounters.length > 0) {
+      filteredSessions.push(session);
+    }
+  });
+
+  console.log(filteredSessions);
+
+  logViewerStore.computedSessions = filteredSessions;
+}
+
+function filterLogsByPlayers() {
+  if (logViewerStore.playersFilter.length === 0) {
+    return (logViewerStore.computedSessions = logViewerStore.sessions);
+  }
+
+  const filteredSessions: SessionInfo[] = [];
+
+  logViewerStore.sessions.forEach((session) => {
     const filteredEncounters = [];
 
     session.sessionEncounters.forEach((encounter) => {
-      if (logViewerStore.logfileFilter.includes(encounter.encounterName)) {
-        filteredEncounters.push(encounter);
+      for (const player of encounter.players) {
+        if (logViewerStore.playersFilter.includes(player)) {
+          filteredEncounters.push(encounter);
+        }
       }
     });
 
