@@ -67,7 +67,7 @@
         <li>Option to screenshot without logo</li>
         <li>Added missing names for Kakul Gate 3 and Valtan Gate 2</li>
         <li>Added players filter to logs/sessions</li>
-        <li>Added missing Akkan Gates</li>
+        <li>Added missing Akkan Gates & Sonavel Image</li>
       </ul>
       <h6 id="1-4-7">1.4.7</h6>
       <ul>

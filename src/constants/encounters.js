@@ -165,6 +165,24 @@ export const encounters = {
       .href,
     encounterNames: ["Lauriel"],
   },
+  AkkanG1: {
+    name: "Akkan Gate 1",
+    image: new URL("../assets/images/encounters/akkan.png", import.meta.url)
+      .href,
+    encounterNames: ["Griefbringer Maurug"],
+  },
+  AkkanG2: {
+    name: "Akkan Gate 2",
+    image: new URL("../assets/images/encounters/akkan.png", import.meta.url)
+      .href,
+    encounterNames: ["Lord of Degradation Akkan"],
+  },
+  AkkanG3: {
+    name: "Akkan Gate 3",
+    image: new URL("../assets/images/encounters/akkan.png", import.meta.url)
+      .href,
+    encounterNames: ["Plague Legion Commander Akkan", "Lord of Kartheon Akkan"],
+  },
   /* GUARDIANS BELOW */
   Achates: {
     name: "Achates",
@@ -330,22 +348,10 @@ export const encounters = {
     ).href,
     encounterNames: ["Kungelanium", "Kungelanium+"],
   },
-  AkkanG1: {
-    name: "Akkan Gate 1",
-    image: new URL("../assets/images/encounters/akkan.png", import.meta.url)
+  Sonavel: {
+    name: "Sonavel",
+    image: new URL("../assets/images/encounters/sonavel.png", import.meta.url)
       .href,
-    encounterNames: ["Griefbringer Maurug"],
-  },
-  AkkanG2: {
-    name: "Akkan Gate 2",
-    image: new URL("../assets/images/encounters/akkan.png", import.meta.url)
-      .href,
-    encounterNames: ["Lord of Degradation Akkan"],
-  },
-  AkkanG3: {
-    name: "Akkan Gate 3",
-    image: new URL("../assets/images/encounters/akkan.png", import.meta.url)
-      .href,
-    encounterNames: ["Plague Legion Commander Akkan"],
+    encounterNames: ["Sonavel", "Sonavel+"],
   },
 };
