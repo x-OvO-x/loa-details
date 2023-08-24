@@ -725,7 +725,7 @@ function calculateLogFileList(value: ParsedLogInfo[]) {
         encounterName: val_encounter.mostDamageTakenEntity.name,
         durationTs: val_encounter.duration,
         duration: millisToMinutesAndSeconds(val_encounter.duration),
-        players: val_encounter.players,
+        players: val_encounter.players ?? [],
       });
     });
 
