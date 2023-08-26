@@ -162,6 +162,7 @@ function parseLog(
 
       for (const encounter of encounters) {
         const duration = encounter.lastCombatPacket - encounter.fightStartedOn;
+        const partiesSimulation: Map<number, string[]> = new Map();
 
         if (duration <= 1000) continue;
 
@@ -173,8 +174,35 @@ function parseLog(
 
         const players: string[] = [];
 
+        for (const [, i] of encounter.entities) {
+          if (!i.isPlayer || i.name === encounter.localPlayer || !i.partyId)
+            continue;
+
+          const party = partiesSimulation.get(i.partyId);
+
+          if (party) {
+            party.push(i.name);
+          } else {
+            partiesSimulation.set(i.partyId, [i.name]);
+          }
+        }
+
+        const parties: string[][] = [...partiesSimulation.values()];
+
         encounter.entities.forEach((i) => {
           if (i.isPlayer && i.damageInfo.damageDealt > 0) {
+            if (parties.length === 1 && parties[0].includes(i.name))
+              i.partyId = undefined;
+
+            if (parties.length > 1) {
+              if (i.partyId) {
+                i.partyId = parties[0].includes(i.name) ? 1 : 2;
+              } else {
+                if (parties[0].length < 4) i.partyId = 1;
+                else i.partyId = 2;
+              }
+            }
+
             players.push(i.name);
           }
 

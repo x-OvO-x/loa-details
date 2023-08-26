@@ -1,5 +1,14 @@
 <template>
-  <tr v-if="player !== undefined">
+  <tr
+    v-if="player !== undefined"
+    :style="{
+      borderLeft: player.partyId
+        ? player.partyId === 1
+          ? '.1rem solid #fff'
+          : '.1rem solid #ff6a00'
+        : 'none',
+    }"
+  >
     <td class="td-class-img">
       <img :src="getClassImage(player.classId, player.icon)" />
     </td>
