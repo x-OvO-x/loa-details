@@ -63,11 +63,18 @@
       <h6 id="custom">Custom Non Official Version</h6>
       <ul>
         <li>Order sessions by Newest or Oldest</li>
-        <li>Gate Numbers on top of the boss name</li>
+        <li>Gate numbers on top of the boss name</li>
         <li>Option to screenshot without logo</li>
         <li>Added missing names for Kakul Gate 3 and Valtan Gate 2</li>
         <li>Added players filter to logs/sessions</li>
         <li>Added missing Akkan Gates & Sonavel Image</li>
+      </ul>
+      <h6 id="1-4-8">1.4.8</h6>
+      <ul>
+        <li>
+          Fix some skills not tracked properly (traps), including Sorceress
+          Frost Call with Rule enhancement
+        </li>
       </ul>
       <h6 id="1-4-7">1.4.7</h6>
       <ul>
