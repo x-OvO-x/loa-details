@@ -69,6 +69,10 @@
         <li>Added players filter to logs/sessions</li>
         <li>Added missing Akkan Gates & Sonavel Image</li>
       </ul>
+      <h6 id="1-4-12">1.4.12</h6>
+      <ul>
+        <li>Fix invalid projectileId</li>
+      </ul>
       <h6 id="1-4-11">1.4.11</h6>
       <ul>
         <li>Game update - 13/09/2023 - Round 2</li>
