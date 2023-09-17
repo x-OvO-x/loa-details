@@ -62,12 +62,13 @@
       <h5>Changelog</h5>
       <h6 id="custom">Custom Non Official Version</h6>
       <ul>
-        <li>Order sessions by Newest or Oldest</li>
+        <li>Order sessions by Newest (default) or Oldest</li>
         <li>Gate numbers on top of the boss name</li>
         <li>Option to screenshot without logo</li>
         <li>Added missing names for Kakul Gate 3 and Valtan Gate 2</li>
         <li>Added players filter to logs/sessions</li>
-        <li>Added missing Akkan Gates & Sonavel Image</li>
+        <li>Added missing Akkan gates & Sonavel image</li>
+        <li>Remove old Brelshaza gates (2 & 6)</li>
       </ul>
       <h6 id="1-4-12">1.4.12</h6>
       <ul>
