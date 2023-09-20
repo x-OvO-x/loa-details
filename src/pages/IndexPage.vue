@@ -70,6 +70,10 @@
         <li>Added missing Akkan gates & Sonavel image</li>
         <li>Remove old Brelshaza gates (2 & 6)</li>
       </ul>
+      <h6 id="1-4-13">1.4.13</h6>
+      <ul>
+        <li>Support for game update - 20/09/2023 (Weekly maintenance)</li>
+      </ul>
       <h6 id="1-4-12">1.4.12</h6>
       <ul>
         <li>Fix invalid projectileId</li>
