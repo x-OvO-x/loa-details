@@ -70,6 +70,14 @@
         <li>Added missing Akkan gates & Sonavel image</li>
         <li>Remove old Brelshaza gates (2 & 6)</li>
       </ul>
+      <h6 id="1-4-15">1.4.15</h6>
+      <ul>
+        <li>Fix counter tracking not working correctly</li>
+      </ul>
+      <h6 id="1-4-14">1.4.14</h6>
+      <ul>
+        <li>Support for game update - 11/10/2023 (Monster Bash)</li>
+      </ul>
       <h6 id="1-4-13">1.4.13</h6>
       <ul>
         <li>Support for game update - 20/09/2023 (Weekly maintenance)</li>
