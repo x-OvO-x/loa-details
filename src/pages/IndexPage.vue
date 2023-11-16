@@ -71,6 +71,14 @@
         <li>Remove old Brelshaza gates (2 & 6)</li>
       </ul>
 
+      <h6 id="1-4-17">1.4.17</h6>
+      <ul>
+        <li>Support for game update - 15/11/2023 (Soul Eater)</li>
+        <li>
+          Changed icon format to website's one as the one used before isn't
+          updated by sg anymore (might make a slight visual difference)
+        </li>
+      </ul>
       <h6 id="1-4-16">1.4.16</h6>
       <ul>
         <li>Support for game update - 25/10/2023 (Chaos Gate)</li>
